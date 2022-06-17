@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 // provider files
-import 'Provider/theme.dart';
+import 'Provider/theme_provider.dart';
 
 // widget files
-import 'Widgets/completed.dart';
-import 'Widgets/todoList.dart';
+import 'Screens/completed.dart';
+import 'Screens/todoList.dart';
 import 'Widgets/new_todo.dart';
 
 class Home extends StatefulWidget {
@@ -35,18 +35,20 @@ class _HomeState extends State<Home> {
     return SafeArea(
         top: false,
         child: Scaffold(
+          extendBodyBehindAppBar: true,
           appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            centerTitle: true,
             title: const Text(
               'To-Do',
             ),
-            elevation: 0.5,
+            elevation: 0,
             actions: <Widget>[
               Switch.adaptive(
                 activeColor: Theme.of(context).primaryColor,
                 value: !themeProvider.getTheme,
                 onChanged: (value) {
-                  final provider = Provider.of<ThemeProvider>(context, listen: false);
-                  provider.toggleThememode(value);
+                  context.read<ThemeProvider>().toggleThememode(value);
                 },
               )
             ],
