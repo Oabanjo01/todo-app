@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:todo/database.dart/database_helper.dart';
 
-import 'todo_model.dart';
+import '../models/todo.dart';
 
 class TodoProvider extends ChangeNotifier {
-  final List<TodoModel> _todoItem = [
-    TodoModel(
-      title: 'Buy an egg',
-      description: 'Buy an egg for the house',
-    ),
-  ];
+  List<TodoModel> _todoItem = [];
 
-  List<TodoModel> get todo {
+  List<TodoModel> get todoitem {
+    return _todoItem;
+  }
+
+  List<TodoModel> get newTodo {
     return [
       ..._todoItem.where((element) => element.isChecked == false).toList()
     ];
@@ -22,37 +22,53 @@ class TodoProvider extends ChangeNotifier {
     ];
   }
 
-  void addTodo(TodoModel todo) {
-    _todoItem.add(todo);
-    notifyListeners();
+  Future <String> getTodos () async {
+    try{
+      _todoItem = await TodoDatabase.instance.queryAlltodos();
+      notifyListeners();
+    } catch (e) {
+      return e.toString();
+    }
+    return 'OK!';
   }
 
-  deleteToDo(TodoModel deletetodo) {
-    _todoItem.remove(deletetodo);
-
-    notifyListeners();
+  Future <String> createTodo (TodoModel todo) async {
+    try{
+      await TodoDatabase.instance.createTodoDB(todo);
+    } catch (e) {
+      return e.toString();
+    }
+    String result = await getTodos();
+    return result;
   }
 
-  void updateTodo (TodoModel updatetodo, String? title, String? description) {
-    
-    updatetodo.title = title!;
-    updatetodo.description = description!;
-
-    notifyListeners();
+  Future<String> deleteToDo (TodoModel todo) async {
+    try{
+      await TodoDatabase.instance.deleteTodo(todo);
+    } catch (e) {
+      return e.toString();
+    }
+    String result = await getTodos();
+    return result;
   }
 
-
-  bool toggleTodoStatus(TodoModel todo) {
-    todo.isChecked = !todo.isChecked;
-    notifyListeners();
-
-    return todo.isChecked;
+    Future <String> editTodo (TodoModel todo) async {
+    try{
+      await TodoDatabase.instance.editTodo(todo);
+    } catch (e) {
+      return e.toString();
+    }
+    String result = await getTodos();
+    return result;
   }
 
-  bool isFavourite(TodoModel todo) {
-    todo.isFavourited = !todo.isFavourited;
-    notifyListeners();
-
-    return todo.isFavourited;
+  Future <String> updateTodo (TodoModel todo) async {
+    try{
+      await TodoDatabase.instance.updateTodos(todo);
+    } catch (e) {
+      return e.toString();
+    }
+    String result = await getTodos();
+    return result;
   }
 }
