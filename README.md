@@ -1,6 +1,6 @@
-# lists_of_data
+# a todo_app
 
-A new Flutter project.
+A new Flutter project on a todo app using provider for state management. 
 
 ## Getting Started
 
