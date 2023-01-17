@@ -17,7 +17,7 @@ class TodoDatabase {
 
     await db.execute('''
       CREATE TABLE $todoTable (
-        $columnId INTEGER PRIMARY KEY
+        $columnId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
         ${TodoFields.title} $textType,
         ${TodoFields.description} $textType,
         ${TodoFields.created} $textType,
@@ -47,17 +47,17 @@ class TodoDatabase {
     db!.close();
   }
 
-  Future<TodoModel> createTodoDB(TodoModel todo) async {
+  Future<int> createTodoDB(TodoModel todo) async {
     final db = await instance.database;
     int id = await db!.insert(todoTable, todo.toMap());
-    return todo;
+    return id;
   }
 
   Future <List<TodoModel>> queryAlltodos () async {
     final db = await instance.database;
     final maps = await db!.query(
       todoTable,
-      orderBy: '${TodoFields.title} ASC',
+      orderBy: columnId,
     );
     List<TodoModel> todoList = maps.isEmpty ? []: maps.map((e) => TodoModel.fromMap(e)).toList();
     return todoList;
@@ -73,9 +73,8 @@ class TodoDatabase {
     return maps.map((e) => TodoModel.fromMap(e)).toList();
   }
 
-  Future<int> editTodo(TodoModel todo) async {
+  Future<int> editTodo(TodoModel todo, int id) async {
     final db = await instance.database;
-    int id = 1;
     return db!.update(
       todoTable,
       todo.toMap(),

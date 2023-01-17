@@ -13,9 +13,8 @@ class TodotextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding:
-          const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 20, right: 20),
+        const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 20, right: 20),
       child: TextField(
-        
         maxLines: lines,
         style: TextStyle(color: color),
         cursorColor: Colors.black87,

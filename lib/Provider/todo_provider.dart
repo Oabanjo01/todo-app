@@ -54,14 +54,14 @@ class TodoProvider extends ChangeNotifier {
 
     Future <String> editTodo (TodoModel todo) async {
     try{
-      await TodoDatabase.instance.editTodo(todo);
+      await TodoDatabase.instance.updateTodos(todo);
     } catch (e) {
       return e.toString();
     }
     String result = await getTodos();
     return result;
   }
-
+  
   Future <String> updateTodo (TodoModel todo) async {
     try{
       await TodoDatabase.instance.updateTodos(todo);
